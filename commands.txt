@@ -3,3 +3,9 @@ terraform init
 terraform plan
 terraform apply
 terraform destory
+
+# for destroying and recreating the resouces
+terraform taint <resource_type>.<resource_name>
+terraform taint <resource_type>.<resource_name>
+
+# 

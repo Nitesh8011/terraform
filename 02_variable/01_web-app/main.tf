@@ -1,7 +1,7 @@
 terraform {
     backend "s3" {
         bucket          = "terraform-state-232443791390"
-        key             = "web-app/terraform.tfstate"
+        key             = "02_variable/01_web-app/terraform.tfstate"
         region          = "ap-southeast-1"
         dynamodb_table  = "terraform_state_lock_table"
         encrypt         = true
@@ -20,8 +20,8 @@ provider "aws" {
 }
 
 resource "aws_instance" "instance_1" {
-    ami             = "ami-00d8fc944fb171e29"
-    instance_type   = "t3.micro"
+    ami             = var.ami
+    instance_type   = var.instance_type
     vpc_security_group_ids  = [aws_security_group.web_app_sg.id]
     user_data               = <<-EOF
                                 #!/bin/bash
@@ -38,8 +38,8 @@ resource "aws_instance" "instance_1" {
 }
 
 resource "aws_instance" "instance_2" {
-    ami                     = "ami-00d8fc944fb171e29"
-    instance_type           = "t3.micro"
+    ami                     = var.ami
+    instance_type           = var.instance_type
     vpc_security_group_ids  = [aws_security_group.web_app_sg.id]
     user_data               = <<-EOF
                                 #!/bin/bash
@@ -56,7 +56,7 @@ resource "aws_instance" "instance_2" {
 }
 
 resource "aws_s3_bucket" "web_app_s3_bucket" {
-    bucket          = "web-app-s3-232443791390"
+    bucket          = var.bucket_name
     force_destroy   = true
 }
 
@@ -224,13 +224,13 @@ resource "aws_lb_listener_rule" "instances" {
 }
 
 resource "aws_db_instance" "web_app_rds" {
-    identifier           = "web-app-rds"
+    identifier           = var.db_identifier
     allocated_storage   = 10
     db_name             = "webapprds"
     engine              = "postgres"
     engine_version      = 16
     instance_class      = "db.t3.micro"
-    username            = "rds_master"
-    password            = "rds_password"
+    username            = var.db_username
+    password            = var.db_password
     skip_final_snapshot  = true
 }
