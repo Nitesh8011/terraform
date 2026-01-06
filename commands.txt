@@ -6,6 +6,9 @@ terraform destory
 
 # for destroying and recreating the resouces
 terraform taint <resource_type>.<resource_name>
-terraform taint <resource_type>.<resource_name>
+terraform untaint <resource_type>.<resource_name>
 
-# 
+terraform validate
+terraform fmt
+terraform workspace new <workspace_name>
+terraform workspace select <workspace_name>
